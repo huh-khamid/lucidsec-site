@@ -1,0 +1,12 @@
+dist/
+.output/
+node_modules/
+.astro/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+.DS_Store
+.vscode/
+.idea/
+*.swp

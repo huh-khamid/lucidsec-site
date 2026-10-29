@@ -1,0 +1,53 @@
+---
+import Base from './Base.astro';
+import { lid1, lid2, spiral } from '../lib/eye';
+import { basePath, content, type Locale } from '../i18n/content';
+
+interface Props {
+  title: string;
+  summary?: string;
+  date: Date;
+  cat: string;
+  locale: Locale;
+}
+const { title, summary, date, cat, locale } = Astro.props;
+const base = basePath(locale);
+const c = content[locale];
+
+const chrome: Record<Locale, { allWriteups: string; back: string }> = {
+  en: { allWriteups: '← All write-ups', back: '← Write-ups' },
+  ru: { allWriteups: '← Все статьи', back: '← Статьи' },
+  uz: { allWriteups: '← Barcha maqolalar', back: '← Maqolalar' },
+};
+const tx = chrome[locale];
+---
+<Base title={`${title} · LucidSec`} description={summary} lang={locale}>
+  <header class="bar scrolled">
+    <div class="shell">
+      <a class="mark" href={base + '/'} aria-label="LucidSec home">
+        <svg viewBox="0 0 240 160" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+          <path d={lid1} /><path d={lid2} /><path d={spiral} />
+        </svg>
+        <span><b>lucid</b><span class="sec">sec</span></span>
+      </a>
+      <nav><a href={base + '/#writeups'}>{tx.allWriteups}</a></nav>
+    </div>
+  </header>
+
+  <main class="shell article">
+    <a class="back" href={base + '/#writeups'}>{tx.back}</a>
+    <p class="art-meta"><span>{cat}</span> · <span>{date.getFullYear()}</span></p>
+    <h1 class="art-title">{title}</h1>
+    {summary && <p class="art-sum">{summary}</p>}
+    <div class="prose">
+      <slot />
+    </div>
+    <footer class="foot" style="margin-top:5rem">
+      <span>© 2026 LucidSec · lucidsec.uz</span>
+      <svg class="eye-sm" viewBox="0 0 240 160" fill="none" stroke="#8c8c8c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d={lid1} /><path d={lid2} /><path d={spiral} />
+      </svg>
+      <span>{c.footerTagline}</span>
+    </footer>
+  </main>
+</Base>
